@@ -2,7 +2,6 @@ import { Button } from '@chakra-ui/button';
 import React, { FC, useState } from 'react';
 import Select from 'react-select/async-creatable';
 import makeAnimated from 'react-select/animated';
-import { OptionTypeBase } from 'react-select';
 
 export interface SearchResult {
   label: string;
