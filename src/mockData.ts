@@ -9,7 +9,7 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const ErrorRegex = /error/gi;
 
-const Users = [
+export const Users = [
   {
     firstName: 'Tara',
     lastName: 'Halvik',

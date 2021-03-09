@@ -4,10 +4,8 @@ import {
   Button,
   Flex,
   useDisclosure,
-  ModalBody,
-  Text,
 } from '@chakra-ui/react';
-import Modal from 'components/Modal/Modal';
+import TeamMatesModal from './TeamMatesModal/TeamMatesModal';
 
 const TeamMates: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -24,17 +22,7 @@ const TeamMates: FC = () => {
           <Button colorScheme='facebook' onClick={onOpen}>Invite teammates</Button>
         </Box>
       </Flex>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        title='Invite members'
-        isCentered
-      >
-        <ModalBody>
-          <Text>Email invite</Text>
-          <Text>Send members as email invitation to join this workspace</Text>
-        </ModalBody>
-      </Modal>
+      <TeamMatesModal isOpen={isOpen} onClose={onClose} />
     </>
   );
 }
