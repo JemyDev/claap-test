@@ -11,8 +11,8 @@ import React, { FC, useState, useContext } from 'react';
 import Modal from 'components/Modal/Modal';
 import Search, { SearchResult } from 'components/Search/Search';
 import { isEmailValid } from 'utils/utils';
-import TeamMatesContext from 'context/TeamMatesContext';
-import { searchUser, users } from 'mockData';
+import TeamMatesContext, { Data as TeamMatesDataContext } from 'context/TeamMatesContext';
+import { searchUser } from 'mockData';
 
 interface Props {
   isOpen: boolean;
@@ -80,7 +80,7 @@ const TeamMatesModal: FC<Props> = ({
 
     return teamMates.map((teamMate) => ({
       label: teamMate.firstName,
-      value: teamMate.firstName,
+      value: { ...teamMate },
     }));
   }
 
@@ -88,19 +88,10 @@ const TeamMatesModal: FC<Props> = ({
     setError(null);
   }
 
-  async function onSubmitSearch(selectedValues: string[] | null): Promise<void> {
+  function onSubmitSearch(selectedValues: TeamMatesDataContext | null): void {
     if (selectedValues) {
       setError(null);
-      const usersData = await users();
-      const data = usersData.map((user, index) => {
-        if (user.firstName === selectedValues[index]) {
-          return user;
-        }
-
-        return selectedValues[index];
-      });
-
-      setData(data);
+      setData(selectedValues);
       onClose();
     } else {
       setError("You didn't added teammates, please select at least one.");

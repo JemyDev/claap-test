@@ -16,7 +16,7 @@ type SearchTerms = (inputValue: string) => Promise<SearchResult[]>;
 
 interface Props {
   searchTerms: SearchTerms;
-  onSubmitSearch: (selectedValues: string[] | null) => Promise<void>;
+  onSubmitSearch: (selectedValues: any | null) => void;
   validateNewOption?: (inputValue: string) => boolean;
   labelButton?: string;
   placeholder?: string;
@@ -38,7 +38,7 @@ const Search: FC<Props> = ({
   placeholder = 'Search a terms...',
 }) => {
   const [canSubmit, setCanSubmit] = useState<boolean>(false);
-  const [selectedValues, setSelectedValues] = useState<string[] | null>(null);
+  const [selectedValues, setSelectedValues] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (
@@ -90,10 +90,10 @@ const Search: FC<Props> = ({
     }
   }
 
-  async function onSubmit(event: FormEvent): Promise<void> {
+  function onSubmit(event: FormEvent): void {
     event.preventDefault();
     setIsLoading(true);
-    await onSubmitSearch(selectedValues);
+    onSubmitSearch(selectedValues);
     setIsLoading(false);
   }
 }

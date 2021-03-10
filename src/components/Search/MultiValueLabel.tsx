@@ -20,7 +20,7 @@ const MultiValueContainer: FC<MultiValueProps<any, any>> = ({ children, ...props
             color='#FFF'
             fontSize='3'
             mr='3'
-            name={props.data.value}
+            name={props.data.label}
             bgColor='#EE748F'
           />
         )}
