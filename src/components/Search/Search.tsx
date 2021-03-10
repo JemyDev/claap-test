@@ -5,11 +5,13 @@ import { Flex } from '@chakra-ui/layout';
 import Button from 'components/Button/Button';
 
 import MultiValueLabel from './MultiValueLabel';
+import Option from './Option';
 import customStyles from './Search.styles';
 
 export interface SearchResult {
   label: string;
   value: any;
+  isDisabled?: true;
 }
 
 type SearchTerms = (inputValue: string) => Promise<SearchResult[] | undefined>;
@@ -27,6 +29,7 @@ const animatedComponents = makeAnimated();
 const components = {
   ...animatedComponents,
   MultiValueLabel,
+  Option,
   DropdownIndicator: null,
 };
 
@@ -38,7 +41,7 @@ const Search: FC<Props> = ({
   placeholder = 'Search a terms...',
 }) => {
   const [canSubmit, setCanSubmit] = useState<boolean>(false);
-  const [selectedValues, setSelectedValues] = useState<any | null>(null);
+  const [selectedValues, setSelectedValues] = useState<(SearchResult | any)[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (
@@ -49,6 +52,8 @@ const Search: FC<Props> = ({
     >
       <Select
         isMulti
+        defaultOptions
+        cacheOptions
         placeholder={placeholder}
         components={components}
         loadOptions={loadOptions}
@@ -56,6 +61,7 @@ const Search: FC<Props> = ({
         isValidNewOption={isValidNewOption}
         isClearable
         styles={customStyles}
+        hideSelectedOptions
         name="search-terms"
       />
       <Button
@@ -76,7 +82,13 @@ const Search: FC<Props> = ({
     return [];
   }
 
-  function isValidNewOption(inputValue: string, _value: any, options: any) {
+  function isValidNewOption(inputValue: string, terms: SearchResult[], _options: any) {
+    const isOptionExist = terms.some((term: SearchResult) => term.value === inputValue);
+
+    if (isOptionExist) {
+      return false;
+    }
+
     if (typeof validateNewOption !== 'undefined') {
       return validateNewOption(inputValue);
     }
