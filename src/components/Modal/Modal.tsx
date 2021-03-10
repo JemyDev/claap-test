@@ -17,7 +17,7 @@ const ModalComponent: FC<Props> = ({ children, title, ...rest }) => {
   return (
     <Modal {...rest}>
       <ModalOverlay />
-      <ModalContent p="16" bg="#272D45">
+      <ModalContent p={['8', '16']} bg="#272D45">
         {title && (
           <ModalHeader
             p='0'

@@ -12,7 +12,7 @@ export interface SearchResult {
   value: any;
 }
 
-type SearchTerms = (inputValue: string) => Promise<SearchResult[]>;
+type SearchTerms = (inputValue: string) => Promise<SearchResult[] | undefined>;
 
 interface Props {
   searchTerms: SearchTerms;
@@ -67,10 +67,16 @@ const Search: FC<Props> = ({
   );
 
   async function loadOptions(inputValue: string): Promise<SearchResult[]> {
-    return searchTerms(inputValue);
+    const terms = await searchTerms(inputValue);
+
+    if(terms) {
+      return terms;
+    }
+
+    return [];
   }
 
-  function isValidNewOption(inputValue: string, _value: any, _options: any) {
+  function isValidNewOption(inputValue: string, _value: any, options: any) {
     if (typeof validateNewOption !== 'undefined') {
       return validateNewOption(inputValue);
     }

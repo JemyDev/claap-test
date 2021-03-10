@@ -49,7 +49,7 @@ const TeamMatesModal: FC<Props> = ({
           mb='6'
         >Send members as email invitation to join this workspace</Text>
         <Search
-          searchTerms={createSearchTerms}
+          searchTerms={searchUsers}
           labelButton='Invite'
           placeholder='Search names or email...'
           onSubmitSearch={onSubmitSearch}
@@ -75,13 +75,17 @@ const TeamMatesModal: FC<Props> = ({
     </Modal>
   );
 
-  async function createSearchTerms(inputValue: string): Promise<SearchResult[]> {
-    const teamMates = await searchUser(inputValue);
+  async function searchUsers(inputValue: string): Promise<SearchResult[] | undefined> {
+    try {
+      const users = await searchUser(inputValue);
 
-    return teamMates.map((teamMate) => ({
-      label: teamMate.firstName,
-      value: { ...teamMate },
-    }));
+      return users.map((user) => ({
+        label: user.firstName,
+        value: { ...user },
+      }));
+    } catch (error) {
+      setError(error);
+    }
   }
 
   function removeError(): void {

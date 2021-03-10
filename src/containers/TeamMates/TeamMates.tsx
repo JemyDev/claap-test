@@ -24,20 +24,27 @@ const TeamMates: FC = () => {
         direction='column'
         as='main'
         minH="100vh"
+        px={['20px', '20px', '20px', '0']}
       >
         <Box>
           <Button onClick={onOpen}>Invite teammates</Button>
         </Box>
-        <Code>
-          {data && JSON.stringify(data)}
-        </Code>
+        {data && (
+          <Code
+            mt='20px'
+            p='20px'
+            width={['full', 'full', 'full', 'auto']}
+          >
+            {JSON.stringify(data)}
+          </Code>
+        )}
       </Flex>
       <ScaleFade initialScale={0.9} in={!!data}>
         <Alert
           status="success"
           variant="subtle"
           position='absolute'
-          width='100%'
+          width='full'
           bottom='0'
           justifyContent='center'
           alignItems='center'
