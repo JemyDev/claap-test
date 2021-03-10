@@ -1,5 +1,4 @@
 import { Styles } from "react-select";
-import { isEmailValid } from "utils/utils";
 
 const customStyles: Styles<any, any> = {
   container: (provided, _state) => ({

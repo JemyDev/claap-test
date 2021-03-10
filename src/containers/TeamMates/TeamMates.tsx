@@ -1,7 +1,10 @@
 import React, { FC, useContext } from 'react';
 import {
+  Alert,
+  AlertIcon,
   Box,
   Code,
+  ScaleFade,
   Flex,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -29,6 +32,20 @@ const TeamMates: FC = () => {
           {data && JSON.stringify(data)}
         </Code>
       </Flex>
+      <ScaleFade initialScale={0.9} in={!!data}>
+        <Alert
+          status="success"
+          variant="subtle"
+          position='absolute'
+          width='100%'
+          bottom='0'
+          justifyContent='center'
+          alignItems='center'
+        >
+          <AlertIcon />
+          You've successfully added teammates to your workspace!
+        </Alert>
+      </ScaleFade>
       <TeamMatesModal isOpen={isOpen} onClose={onClose} />
     </>
   );
