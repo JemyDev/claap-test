@@ -5,7 +5,6 @@ const Option: FC<OptionProps<any, any>> = ({ data, ...props }) => {
   const { isDisabled } = props;
   const [newData, setNewData] = useState<any>(data);
 
-
   return (
     !isDisabled ? (
       <div onClick={onSelect}>
