@@ -1,13 +1,18 @@
 import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  CloseButton,
   ModalBody,
   Text,
 } from '@chakra-ui/react';
-import React, { FC } from 'react';
+import React, { FC, useState, useContext } from 'react';
 
 import Modal from 'components/Modal/Modal';
 import Search, { SearchResult } from 'components/Search/Search';
-import { useFindTeamMates } from 'hooks/useFindTeamMates';
 import { isEmailValid } from 'utils/utils';
+import TeamMatesContext from 'context/TeamMatesContext';
+import { searchUser, users } from 'mockData';
 
 interface Props {
   isOpen: boolean;
@@ -18,7 +23,8 @@ const TeamMatesModal: FC<Props> = ({
   isOpen,
   onClose,
 }) => {
-  const { findTeamMates } = useFindTeamMates();
+  const { setData } = useContext(TeamMatesContext);
+  const [error, setError] = useState<string | null>(null);
 
   return (
     <Modal
@@ -37,12 +43,19 @@ const TeamMatesModal: FC<Props> = ({
           onSubmitSearch={onSubmitSearch}
           validateNewOption={isEmailValid}
         />
+        {error && (
+          <Alert status='error'>
+            <AlertIcon />
+            <AlertTitle mr={2}>{error}</AlertTitle>
+            <CloseButton position='absolute' right="8px" top="8px" />
+          </Alert>
+        )}
       </ModalBody>
     </Modal>
   );
 
   async function createSearchTerms(inputValue: string): Promise<SearchResult[]> {
-    const teamMates = await findTeamMates(inputValue);
+    const teamMates = await searchUser(inputValue);
 
     return teamMates.map((teamMate) => ({
       label: teamMate.firstName,
@@ -50,8 +63,23 @@ const TeamMatesModal: FC<Props> = ({
     }));
   }
 
-  function onSubmitSearch(): void {
-    onClose();
+  async function onSubmitSearch(selectedValues: string[] | null): Promise<void> {
+    if (selectedValues) {
+      setError(null);
+      const usersData = await users();
+      const data = usersData.map((user, index) => {
+        if (user.firstName === selectedValues[index]) {
+          return user;
+        }
+
+        return selectedValues[index];
+      });
+
+      setData(data);
+      onClose();
+    } else {
+      setError("You didn't added teammates, please select at least one.");
+    }
   }
 };
 

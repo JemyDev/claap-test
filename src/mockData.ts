@@ -28,6 +28,12 @@ const normalize = (input: string): string => {
   return input.trim().toLowerCase();
 }
 
+export const users = async (): Promise<User[]> => {
+  await delay(100 + Math.random() * 100);
+
+  return Users;
+}
+
 export const searchUser = async (input: string): Promise<User[]> => {
   const normalized = normalize(input);
 

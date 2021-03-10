@@ -1,8 +1,7 @@
 import { Button } from '@chakra-ui/button';
-import React, { FC, FormEvent, FormEventHandler, useState } from 'react';
+import React, { FC, FormEvent, useState } from 'react';
 import Select from 'react-select/async-creatable';
 import makeAnimated from 'react-select/animated';
-import { OptionsType, OptionTypeBase } from 'react-select';
 
 export interface SearchResult {
   label: string;
@@ -13,7 +12,7 @@ type SearchTerms = (inputValue: string) => Promise<SearchResult[]>;
 
 interface Props {
   searchTerms: SearchTerms;
-  onSubmitSearch: () => void;
+  onSubmitSearch: (selectedValues: string[] | null) => void;
   validateNewOption?: (inputValue: string) => boolean;
   labelButton?: string;
   placeholder?: string;
@@ -78,8 +77,7 @@ const Search: FC<Props> = ({
 
   function onSubmit(event: FormEvent) {
     event.preventDefault();
-    console.log(selectedValues);
-    // onSubmitSearch();
+    onSubmitSearch(selectedValues);
   }
 }
 
