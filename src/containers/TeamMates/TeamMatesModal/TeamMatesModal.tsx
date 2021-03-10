@@ -32,10 +32,22 @@ const TeamMatesModal: FC<Props> = ({
       onClose={onClose}
       title='Invite members'
       isCentered
+      size='lg'
     >
-      <ModalBody>
-        <Text>Email invite</Text>
-        <Text>Send members as email invitation to join this workspace</Text>
+      <ModalBody p='0'>
+        <Text
+          as='h4'
+          color='#DBE1E6'
+          fontSize='md'
+          lineHeight='5'
+          mb='4'
+        >Email invite</Text>
+        <Text
+          color='#8C9DB5'
+          fontSize='md'
+          lineHeight='5'
+          mb='6'
+        >Send members as email invitation to join this workspace</Text>
         <Search
           searchTerms={createSearchTerms}
           labelButton='Invite'
@@ -44,12 +56,21 @@ const TeamMatesModal: FC<Props> = ({
           validateNewOption={isEmailValid}
         />
         {error && (
-          <Alert status='error'>
+          <Alert mt='6' status='error'>
             <AlertIcon />
             <AlertTitle mr={2}>{error}</AlertTitle>
-            <CloseButton position='absolute' right="8px" top="8px" />
+            <CloseButton
+              position='absolute'
+              right='8px'
+              top='8px'
+              onClick={removeError}
+            />
           </Alert>
         )}
+        <Alert mt='6' status='info'>
+          <AlertIcon />
+          Add an existing user or a valid email to invite them in your workspace.
+        </Alert>
       </ModalBody>
     </Modal>
   );
@@ -61,6 +82,10 @@ const TeamMatesModal: FC<Props> = ({
       label: teamMate.firstName,
       value: teamMate.firstName,
     }));
+  }
+
+  function removeError(): void {
+    setError(null);
   }
 
   async function onSubmitSearch(selectedValues: string[] | null): Promise<void> {

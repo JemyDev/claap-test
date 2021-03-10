@@ -1,13 +1,13 @@
 import React, { FC, useContext } from 'react';
 import {
   Box,
-  Button,
   Code,
   Flex,
   useDisclosure,
 } from '@chakra-ui/react';
 import TeamMatesModal from './TeamMatesModal/TeamMatesModal';
 import TeamMatesContext from 'context/TeamMatesContext';
+import Button from 'components/Button/Button';
 
 const TeamMates: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -23,7 +23,7 @@ const TeamMates: FC = () => {
         minH="100vh"
       >
         <Box>
-          <Button colorScheme='facebook' onClick={onOpen}>Invite teammates</Button>
+          <Button onClick={onOpen}>Invite teammates</Button>
         </Box>
         <Code>
           {data && JSON.stringify(data)}

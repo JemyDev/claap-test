@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import {
   ChakraProvider,
-  theme,
 } from '@chakra-ui/react';
 import TeamMates from './TeamMates/TeamMates';
 import { TeamMatesContextProvider } from 'context/TeamMatesContext';
+import theme from 'theme/theme';
 
 export const App: FC = () => (
   <ChakraProvider theme={theme}>

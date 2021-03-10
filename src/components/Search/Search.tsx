@@ -1,7 +1,11 @@
-import { Button } from '@chakra-ui/button';
 import React, { FC, FormEvent, useState } from 'react';
 import Select from 'react-select/async-creatable';
 import makeAnimated from 'react-select/animated';
+import { Flex } from '@chakra-ui/layout';
+import Button from 'components/Button/Button';
+
+import MultiValueLabel from './MultiValueLabel';
+import customStyles from './Search.styles';
 
 export interface SearchResult {
   label: string;
@@ -12,7 +16,7 @@ type SearchTerms = (inputValue: string) => Promise<SearchResult[]>;
 
 interface Props {
   searchTerms: SearchTerms;
-  onSubmitSearch: (selectedValues: string[] | null) => void;
+  onSubmitSearch: (selectedValues: string[] | null) => Promise<void>;
   validateNewOption?: (inputValue: string) => boolean;
   labelButton?: string;
   placeholder?: string;
@@ -21,8 +25,9 @@ interface Props {
 const animatedComponents = makeAnimated();
 
 const components = {
-  DropdownIndicator: null,
   ...animatedComponents,
+  MultiValueLabel,
+  DropdownIndicator: null,
 };
 
 const Search: FC<Props> = ({
@@ -34,9 +39,14 @@ const Search: FC<Props> = ({
 }) => {
   const [canSubmit, setCanSubmit] = useState<boolean>(false);
   const [selectedValues, setSelectedValues] = useState<string[] | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (
-    <form onSubmit={onSubmit}>
+    <Flex
+      as='form'
+      align='center'
+      onSubmit={onSubmit}
+    >
       <Select
         isMulti
         placeholder={placeholder}
@@ -45,10 +55,15 @@ const Search: FC<Props> = ({
         onChange={onChange}
         isValidNewOption={isValidNewOption}
         isClearable
+        styles={customStyles}
         name="search-terms"
       />
-      <Button type='submit' disabled={!canSubmit}>{labelButton}</Button>
-    </form>
+      <Button
+        isLoading={isLoading}
+        type='submit'
+        disabled={!canSubmit}
+      >{labelButton}</Button>
+    </Flex>
   );
 
   async function loadOptions(inputValue: string): Promise<SearchResult[]> {
@@ -75,9 +90,11 @@ const Search: FC<Props> = ({
     }
   }
 
-  function onSubmit(event: FormEvent) {
+  async function onSubmit(event: FormEvent): Promise<void> {
     event.preventDefault();
-    onSubmitSearch(selectedValues);
+    setIsLoading(true);
+    await onSubmitSearch(selectedValues);
+    setIsLoading(false);
   }
 }
 

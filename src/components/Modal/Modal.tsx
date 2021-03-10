@@ -1,3 +1,4 @@
+import { Center } from '@chakra-ui/layout';
 import {
   Modal,
   ModalOverlay,
@@ -16,8 +17,21 @@ const ModalComponent: FC<Props> = ({ children, title, ...rest }) => {
   return (
     <Modal {...rest}>
       <ModalOverlay />
-      <ModalContent>
-        {title && <ModalHeader>{title}</ModalHeader>}
+      <ModalContent p="16" bg="#272D45">
+        {title && (
+          <ModalHeader
+            p='0'
+            mb="8"
+          >
+            <Center
+              as='h3'
+              color='#DBE1E6'
+              fontSize='2xl'
+              lineHeight='5'
+              fontWeight='normal'
+            >{title}</Center>
+          </ModalHeader>
+        )}
         <ModalCloseButton />
         {children}
       </ModalContent>
