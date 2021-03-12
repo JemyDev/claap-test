@@ -93,6 +93,7 @@ const Search: FC<Props> = ({
     }
 
     if (typeof validateNewOption !== 'undefined') {
+      console.log(validateNewOption(inputValue));
       return validateNewOption(inputValue);
     }
 
