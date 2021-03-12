@@ -13,6 +13,7 @@ import Search, { SearchResult } from 'components/Search/Search';
 import { isEmailValid } from 'utils/utils';
 import TeamMatesContext, { Data as TeamMatesDataContext } from 'context/TeamMatesContext';
 import { searchUser } from 'mockData';
+import { Option } from 'react-select/src/filters';
 
 interface Props {
   isOpen: boolean;
