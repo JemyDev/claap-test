@@ -5,13 +5,12 @@ import { Flex } from '@chakra-ui/layout';
 import Button from 'components/Button/Button';
 
 import MultiValueLabel from './MultiValueLabel';
-import Option from './Option';
 import customStyles from './Search.styles';
+import { Option } from 'react-select/src/filters';
 
 export interface SearchResult {
   label: string;
   value: any;
-  isDisabled?: true;
 }
 
 type SearchTerms = (inputValue: string) => Promise<SearchResult[] | undefined>;
@@ -29,7 +28,6 @@ const animatedComponents = makeAnimated();
 const components = {
   ...animatedComponents,
   MultiValueLabel,
-  Option,
   DropdownIndicator: null,
 };
 
@@ -42,6 +40,7 @@ const Search: FC<Props> = ({
 }) => {
   const [canSubmit, setCanSubmit] = useState<boolean>(false);
   const [selectedValues, setSelectedValues] = useState<(SearchResult | any)[] | null>(null);
+  const [selectedLabels, setSelectedLabels] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (
@@ -58,10 +57,10 @@ const Search: FC<Props> = ({
         components={components}
         loadOptions={loadOptions}
         onChange={onChange}
+        filterOption={filterOption}
         isValidNewOption={isValidNewOption}
         isClearable
         styles={customStyles}
-        hideSelectedOptions
         name="search-terms"
       />
       <Button
@@ -72,10 +71,14 @@ const Search: FC<Props> = ({
     </Flex>
   );
 
+  function filterOption(option: Option, _rawInput: any): boolean {
+    return !selectedLabels?.some((value) => value === option.label);
+  }
+
   async function loadOptions(inputValue: string): Promise<SearchResult[]> {
     const terms = await searchTerms(inputValue);
 
-    if(terms) {
+    if (terms) {
       return terms;
     }
 
@@ -98,12 +101,15 @@ const Search: FC<Props> = ({
 
   function onChange(values: any, _action: any): void {
     const currentValues = values.map((result: SearchResult) => result.value);
+    const currentLabels = values.map((result: SearchResult) => result.label);
 
     if(currentValues.length > 0) {
       setSelectedValues(currentValues);
+      setSelectedLabels(currentLabels);
       setCanSubmit(true);
     } else {
       setSelectedValues(null);
+      setSelectedLabels([]);
       setCanSubmit(false);
     }
   }
